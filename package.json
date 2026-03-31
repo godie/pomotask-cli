@@ -1,0 +1,30 @@
+{
+  "name": "pomotask-cli",
+  "version": "0.0.1",
+  "description": "CLI for Pomotask — deterministic, auditable, agent-friendly",
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "packageManager": "pnpm@10.4.1",
+  "bin": {
+    "pomotask": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit",
+    "sync-types": "node scripts/sync-types.mjs"
+  },
+  "dependencies": {
+    "commander": "^13.1.0",
+    "convex": "^1.19.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.9"
+  }
+}
