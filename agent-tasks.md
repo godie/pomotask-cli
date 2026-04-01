@@ -121,7 +121,7 @@ Criterio de aceptación:
 ## Jules — ownership principal
 
 ### Bloque J. Auditoría de contrato
-**J-01 — Auditar que el contexto implementado coincida con `convex-cli-contexto.md`**
+**J-01 — Auditar que el contexto implementado coincida con `convex-cli-contexto.md`** [COMPLETADA]
 Revisar:
 - stack correcto
 - repo separado
