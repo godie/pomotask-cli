@@ -1,4 +1,4 @@
-import { ConvexClient } from "convex/browser";
+import { ConvexClient } from "convex";
 import { InvalidAgentError } from "./errors.js";
 
 /**
