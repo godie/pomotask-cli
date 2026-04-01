@@ -1,5 +1,5 @@
 import { ConvexClient } from "convex/browser";
-import { InvalidAgentError } from "./errors.js";
+import { InvalidAgentError, NetworkError } from "./errors.js";
 
 /**
  * Get environment variables - wrapped for testability
@@ -12,10 +12,9 @@ const CONVEX_URL = getEnvVar("CONVEX_URL");
 const POMOTASK_AGENT_ID = getEnvVar("POMOTASK_AGENT_ID");
 
 /**
- * Validate environment and initialize Convex client.
- * Call once at startup — exported as singleton.
+ * Validate environment. Throws InvalidAgentError if invalid.
  */
-function validateEnvironment(): void {
+export function validateEnvironment(): void {
   if (!CONVEX_URL || !POMOTASK_AGENT_ID) {
     throw new InvalidAgentError(
       !CONVEX_URL
@@ -25,14 +24,47 @@ function validateEnvironment(): void {
   }
 }
 
-// Validate at module load time (runtime behavior)
-validateEnvironment();
+/**
+ * Get Convex client - lazy initialization after validation
+ */
+let convexClient: ConvexClient | null = null;
 
-export const convex = new ConvexClient(CONVEX_URL as string);
+export function getConvexClient(): ConvexClient {
+  if (!convexClient) {
+    validateEnvironment();
+    convexClient = new ConvexClient(CONVEX_URL as string);
+  }
+  return convexClient;
+}
 
 export const AGENT_ID = POMOTASK_AGENT_ID;
 
 export const CONVEX_TIMEOUT_MS = 10_000;
+
+/**
+ * Wrap a Convex query/mutation with timeout.
+ * Throws NetworkError if the operation exceeds CONVEX_TIMEOUT_MS.
+ */
+export async function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number = CONVEX_TIMEOUT_MS,
+): Promise<T> {
+  let timeoutId: NodeJS.Timeout | undefined;
+
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timeoutId = setTimeout(() => {
+      reject(new NetworkError(`Operation timed out after ${timeoutMs}ms`));
+    }, timeoutMs);
+  });
+
+  try {
+    return await Promise.race([promise, timeoutPromise]);
+  } finally {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  }
+}
 
 // Export for testing - allows mocking env vars
 export const ENV = {
