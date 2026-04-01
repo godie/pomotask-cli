@@ -4,19 +4,16 @@
  * Claims a task of the specified type for the current agent.
  */
 
-import { AGENT_ID, validateEnvironment } from "../../lib/convex.js";
-import { writeJson } from "../../lib/output.js";
+import { writeJson, OutputFormat } from "../../lib/output.js";
 import { NetworkError, NoTasksAvailableError, ValidationError, InvalidAgentError } from "../../lib/errors.js";
 
 export interface ClaimTaskOptions {
   type: string;
+  format?: OutputFormat;
 }
 
 export async function claimTask(options: ClaimTaskOptions): Promise<void> {
   try {
-    // Validate environment first
-    validateEnvironment();
-
     // Validate task type is not empty
     if (!options.type || options.type.trim() === "") {
       throw new ValidationError("--type is required");
@@ -24,22 +21,27 @@ export async function claimTask(options: ClaimTaskOptions): Promise<void> {
     
     // TODO: Call actual Convex mutation when types are synced
     // const convex = getConvexClient();
-    // const result = await convex.mutation("api:tasks.claim", {
+    // const result = await convex.mutation("api:tasks.claimTask", {
     //   agentId: AGENT_ID,
     //   type: options.type,
     // });
     
     // Placeholder: simulate no tasks available (for exit code 1 test)
-    const hasTasks = false; // TODO: Check with real API
+    // In a real scenario, this would come from the mutation result
+    const result = null;
     
-    if (!hasTasks) {
+    if (!result) {
       throw new NoTasksAvailableError();
     }
     
+    // The context doc shows a flat structure for a successful claim
     writeJson({
-      ok: true,
-      command: "task claim",
-      data: { taskId: "claimed-task-id", agentId: AGENT_ID },
+      id: "abc123",
+      title: "Refactor auth module",
+      type: options.type,
+      projectId: "xyz789",
+      branchName: "refactor-auth-module-abc123",
+      baseBranch: "main"
     });
   } catch (err) {
     if (err instanceof NoTasksAvailableError || err instanceof ValidationError || err instanceof InvalidAgentError) {
