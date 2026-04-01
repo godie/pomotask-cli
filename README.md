@@ -25,16 +25,16 @@ Missing or invalid environment variables will result in **Exit Code 4**.
 ## Usage
 
 ### Task Operations
-- `pomotask task list [--status <status>] [--type <type>]`: List available tasks.
+- `pomotask task list [--status <status>] [--type <type>]`: List available tasks with sanitization.
 - `pomotask task claim --type <type>`: Claim a task of a specific type.
-- `pomotask task progress <taskId> <message> [--level <info|warn|error>]`: Report progress. Message is normalized and truncated.
-- `pomotask task complete <taskId> --pr-url <url> --commit-sha <sha>`: Mark task as completed.
+- `pomotask task progress <taskId> <message> [--level <info|warn|error>]`: Report progress. Message is normalized and truncated to 280 characters.
+- `pomotask task complete <taskId> --pr-url <url> --commit-sha <sha>`: Mark task as completed. Validates PR URL and commit SHA (SHA-1/SHA-256).
 - `pomotask task fail <taskId> --reason <reason>`: Mark task as failed.
 - `pomotask task create --title <title> --type <type> --project <projectId>`: Create a new task.
 - `pomotask task comment <taskId> --type <type> --message <message>`: Add a comment to a task.
 
 ### Agent Operations
-- `pomotask agent register --name <name> --type <type> [--capabilities <caps>]`: Register a new agent.
+- `pomotask agent register --name <name> --type <type> [--capabilities <caps>]`: Register a new agent with optional comma-separated capabilities.
 - `pomotask agent heartbeat`: Update agent's last seen status.
 - `pomotask agent status`: Get the current status of the agent.
 
@@ -44,7 +44,7 @@ Missing or invalid environment variables will result in **Exit Code 4**.
 |------|---------|--------------|
 | 0 | Success | Continue flow |
 | 1 | No tasks available | Wait / polling |
-| 2 | Network / timeout error | Retry immediately |
+| 2 | Network / timeout error | Retry immediately (10s timeout enforced) |
 | 3 | Validation / argument error | Correct logic/prompt and retry |
 | 4 | Authentication / environment / agent error | Abort and request intervention |
 
