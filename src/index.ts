@@ -3,6 +3,13 @@
 import { Command } from "commander";
 import { writeStderr, writeJson } from "./lib/output.js";
 import { mapError } from "./lib/errors.js";
+import { listTasks } from "./commands/task/list.js";
+import { claimTask } from "./commands/task/claim.js";
+import { reportProgress } from "./commands/task/progress.js";
+import { completeTask } from "./commands/task/complete.js";
+import { failTask } from "./commands/task/fail.js";
+import { createTask } from "./commands/task/create.js";
+import { commentTask } from "./commands/task/comment.js";
 
 const program = new Command();
 
@@ -21,8 +28,8 @@ task
   .option("--status <status>", "Filter by status")
   .option("--type <type>", "Filter by type")
   .option("--format <format>", "Output format (json|human)", "json")
-  .action(async () => {
-    writeJson({ ok: true, command: "task list", data: null });
+  .action(async (opts) => {
+    await listTasks({ status: opts.status, type: opts.type });
   });
 
 task
@@ -30,16 +37,16 @@ task
   .description("Claim an available task")
   .requiredOption("--type <type>", "Task type to claim")
   .option("--format <format>", "Output format (json|human)", "json")
-  .action(async () => {
-    writeJson({ ok: true, command: "task claim", data: null });
+  .action(async (opts) => {
+    await claimTask({ type: opts.type });
   });
 
 task
   .command("progress <taskId> <message>")
   .description("Report progress on a task")
   .option("--level <level>", "Progress level (info|warn|error)", "info")
-  .action(async (taskId: string, message: string) => {
-    writeJson({ ok: true, command: "task progress", taskId, message });
+  .action(async (taskId: string, message: string, opts) => {
+    await reportProgress({ taskId, message, level: opts.level });
   });
 
 task
@@ -47,16 +54,16 @@ task
   .description("Mark a task as completed")
   .requiredOption("--pr-url <url>", "Pull request URL")
   .requiredOption("--commit-sha <sha>", "Commit SHA")
-  .action(async (taskId: string) => {
-    writeJson({ ok: true, command: "task complete", taskId });
+  .action(async (taskId: string, opts) => {
+    await completeTask({ taskId, prUrl: opts.prUrl, commitSha: opts.commitSha });
   });
 
 task
   .command("fail <taskId>")
   .description("Mark a task as failed")
   .requiredOption("--reason <reason>", "Failure reason")
-  .action(async (taskId: string) => {
-    writeJson({ ok: true, command: "task fail", taskId });
+  .action(async (taskId: string, opts) => {
+    await failTask({ taskId, reason: opts.reason });
   });
 
 task
@@ -65,8 +72,8 @@ task
   .requiredOption("--title <title>", "Task title")
   .requiredOption("--type <type>", "Task type")
   .requiredOption("--project <projectId>", "Project ID")
-  .action(async () => {
-    writeJson({ ok: true, command: "task create", data: null });
+  .action(async (opts) => {
+    await createTask({ title: opts.title, type: opts.type, projectId: opts.project });
   });
 
 task
@@ -74,8 +81,8 @@ task
   .description("Add a comment to a task")
   .requiredOption("--type <type>", "Comment type")
   .requiredOption("--message <message>", "Comment message")
-  .action(async (taskId: string) => {
-    writeJson({ ok: true, command: "task comment", taskId });
+  .action(async (taskId: string, opts) => {
+    await commentTask({ taskId, type: opts.type, message: opts.message });
   });
 
 // ── agent ─────────────────────────────────────────────────────────────

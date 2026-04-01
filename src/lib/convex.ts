@@ -12,10 +12,9 @@ const CONVEX_URL = getEnvVar("CONVEX_URL");
 const POMOTASK_AGENT_ID = getEnvVar("POMOTASK_AGENT_ID");
 
 /**
- * Validate environment and initialize Convex client.
- * Call once at startup — exported as singleton.
+ * Validate environment. Throws InvalidAgentError if invalid.
  */
-function validateEnvironment(): void {
+export function validateEnvironment(): void {
   if (!CONVEX_URL || !POMOTASK_AGENT_ID) {
     throw new InvalidAgentError(
       !CONVEX_URL
@@ -25,10 +24,18 @@ function validateEnvironment(): void {
   }
 }
 
-// Validate at module load time (runtime behavior)
-validateEnvironment();
+/**
+ * Get Convex client - lazy initialization after validation
+ */
+let convexClient: ConvexClient | null = null;
 
-export const convex = new ConvexClient(CONVEX_URL as string);
+export function getConvexClient(): ConvexClient {
+  if (!convexClient) {
+    validateEnvironment();
+    convexClient = new ConvexClient(CONVEX_URL as string);
+  }
+  return convexClient;
+}
 
 export const AGENT_ID = POMOTASK_AGENT_ID;
 
