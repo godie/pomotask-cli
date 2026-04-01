@@ -4,7 +4,6 @@
  * Registers an agent with name, type, and capabilities.
  */
 
-import { getConvexClient } from "../../lib/convex.js";
 import { writeJson } from "../../lib/output.js";
 import { NetworkError, ValidationError } from "../../lib/errors.js";
 

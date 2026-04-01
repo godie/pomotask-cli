@@ -4,7 +4,7 @@
  * Sends a heartbeat to indicate the agent is alive.
  */
 
-import { AGENT_ID, getConvexClient } from "../../lib/convex.js";
+import { AGENT_ID } from "../../lib/convex.js";
 import { writeJson } from "../../lib/output.js";
 import { InvalidAgentError, NetworkError } from "../../lib/errors.js";
 
