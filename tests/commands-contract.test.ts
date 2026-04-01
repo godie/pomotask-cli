@@ -258,3 +258,108 @@ describe("task progress - contract tests", () => {
     );
   });
 });
+
+describe("agent register - contract tests", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("should output valid JSON with all required fields", async () => {
+    const { registerAgent } = await import("../src/commands/agent/register.js");
+    await registerAgent({ name: "codex-1", type: "codex", capabilities: "codegen,refactor" });
+    
+    expect(writeJson).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ok: true,
+        command: "agent register",
+        data: expect.objectContaining({
+          name: "codex-1",
+          type: "codex",
+          capabilities: ["codegen", "refactor"],
+        }),
+      })
+    );
+  });
+
+  it("should reject missing name", async () => {
+    const { registerAgent } = await import("../src/commands/agent/register.js");
+    await expect(
+      registerAgent({ name: "", type: "codex", capabilities: "" })
+    ).rejects.toThrow(ValidationError);
+  });
+
+  it("should reject missing type", async () => {
+    const { registerAgent } = await import("../src/commands/agent/register.js");
+    await expect(
+      registerAgent({ name: "codex-1", type: "", capabilities: "" })
+    ).rejects.toThrow(ValidationError);
+  });
+
+  it("should handle empty capabilities", async () => {
+    const { registerAgent } = await import("../src/commands/agent/register.js");
+    await registerAgent({ name: "codex-1", type: "codex", capabilities: "" });
+    
+    expect(writeJson).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          capabilities: [],
+        }),
+      })
+    );
+  });
+});
+
+describe("agent heartbeat - contract tests", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("should output valid JSON with all required fields", async () => {
+    // Mock AGENT_ID
+    vi.doMock("../src/lib/convex.js", () => ({
+      ...vi.importActual("../src/lib/convex.js"),
+      AGENT_ID: "test-agent-id",
+    }));
+    
+    const { sendHeartbeat } = await import("../src/commands/agent/heartbeat.js");
+    await sendHeartbeat();
+    
+    expect(writeJson).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ok: true,
+        command: "agent heartbeat",
+        data: expect.objectContaining({
+          agentId: "test-agent-id",
+          status: "alive",
+        }),
+      })
+    );
+  });
+});
+
+describe("agent status - contract tests", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("should output valid JSON with all required fields", async () => {
+    vi.doMock("../src/lib/convex.js", () => ({
+      ...vi.importActual("../src/lib/convex.js"),
+      AGENT_ID: "test-agent-id",
+    }));
+    
+    const { getAgentStatus } = await import("../src/commands/agent/status.js");
+    await getAgentStatus();
+    
+    expect(writeJson).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ok: true,
+        command: "agent status",
+        data: expect.objectContaining({
+          agentId: "test-agent-id",
+          status: "active",
+        }),
+      })
+    );
+  });
+});

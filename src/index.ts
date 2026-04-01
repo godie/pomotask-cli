@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { writeStderr, writeJson } from "./lib/output.js";
+import { writeStderr } from "./lib/output.js";
 import { mapError } from "./lib/errors.js";
 import { listTasks } from "./commands/task/list.js";
 import { claimTask } from "./commands/task/claim.js";
@@ -10,6 +10,9 @@ import { completeTask } from "./commands/task/complete.js";
 import { failTask } from "./commands/task/fail.js";
 import { createTask } from "./commands/task/create.js";
 import { commentTask } from "./commands/task/comment.js";
+import { registerAgent } from "./commands/agent/register.js";
+import { sendHeartbeat } from "./commands/agent/heartbeat.js";
+import { getAgentStatus } from "./commands/agent/status.js";
 
 const program = new Command();
 
@@ -94,23 +97,23 @@ agent
   .description("Register a new agent")
   .requiredOption("--name <name>", "Agent name")
   .requiredOption("--type <type>", "Agent type")
-  .requiredOption("--capabilities <caps>", "Comma-separated capabilities")
-  .action(async () => {
-    writeJson({ ok: true, command: "agent register", data: null });
+  .option("--capabilities <caps>", "Comma-separated capabilities")
+  .action(async (opts) => {
+    await registerAgent({ name: opts.name, type: opts.type, capabilities: opts.capabilities || "" });
   });
 
 agent
   .command("heartbeat")
   .description("Send agent heartbeat")
   .action(async () => {
-    writeJson({ ok: true, command: "agent heartbeat", data: null });
+    await sendHeartbeat();
   });
 
 agent
   .command("status")
   .description("Get agent status")
   .action(async () => {
-    writeJson({ ok: true, command: "agent status", data: null });
+    await getAgentStatus();
   });
 
 // ── run ───────────────────────────────────────────────────────────────

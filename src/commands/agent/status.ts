@@ -1,2 +1,40 @@
-// agent/status.ts — placeholder, wiring in src/index.ts
-export {};
+/**
+ * agent/status.ts — Get agent status
+ * 
+ * Gets the current status of the agent.
+ */
+
+import { AGENT_ID, getConvexClient } from "../../lib/convex.js";
+import { writeJson } from "../../lib/output.js";
+import { InvalidAgentError, NetworkError } from "../../lib/errors.js";
+
+export async function getAgentStatus(): Promise<void> {
+  try {
+    // Validate that agent ID is configured
+    if (!AGENT_ID) {
+      throw new InvalidAgentError("POMOTASK_AGENT_ID is required for status");
+    }
+    
+    // TODO: Call actual Convex query when types are synced
+    // const convex = getConvexClient();
+    // const result = await convex.query("api:agents.status", {
+    //   agentId: AGENT_ID,
+    // });
+    
+    // Placeholder response
+    writeJson({
+      ok: true,
+      command: "agent status",
+      data: {
+        agentId: AGENT_ID,
+        status: "active",
+        lastSeen: new Date().toISOString(),
+      },
+    });
+  } catch (err) {
+    if (err instanceof InvalidAgentError || err instanceof NetworkError) {
+      throw err;
+    }
+    throw new NetworkError(err instanceof Error ? err.message : "Failed to get agent status");
+  }
+}
