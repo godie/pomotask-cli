@@ -190,6 +190,19 @@ describe("task list - contract tests", () => {
       })
     );
   });
+
+  it("should sanitize special characters in filters", async () => {
+    await listTasks({ status: "open&test", type: "bug|fix" });
+    
+    expect(writeJson).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filters: expect.objectContaining({
+          status: "opentest",
+          type: "bugfix",
+        }),
+      })
+    );
+  });
 });
 
 describe("task claim - contract tests", () => {
@@ -201,6 +214,18 @@ describe("task claim - contract tests", () => {
     await expect(
       claimTask({ type: "bugfix" })
     ).rejects.toThrow(NoTasksAvailableError);
+  });
+
+  it("should reject empty type", async () => {
+    await expect(
+      claimTask({ type: "" })
+    ).rejects.toThrow(ValidationError);
+  });
+
+  it("should reject type with only whitespace", async () => {
+    await expect(
+      claimTask({ type: "   " })
+    ).rejects.toThrow(ValidationError);
   });
 });
 
