@@ -144,14 +144,14 @@ describe("task comment - contract tests", () => {
   });
 
   it("should output valid JSON with all required fields", async () => {
-    await commentTask({ taskId: "task-1", type: "question", message: "Need clarification" });
+    await commentTask({ taskId: "task-1", type: "clarification", message: "Need clarification" });
     
     expect(writeJson).toHaveBeenCalledWith(
       expect.objectContaining({
         ok: true,
         command: "task comment",
         taskId: "task-1",
-        type: "question",
+        type: "clarification",
         message: "Need clarification",
       })
     );
@@ -165,7 +165,7 @@ describe("task comment - contract tests", () => {
 
   it("should reject empty message after trimming", async () => {
     await expect(
-      commentTask({ taskId: "task-1", type: "question", message: "   " })
+      commentTask({ taskId: "task-1", type: "clarification", message: "   " })
     ).rejects.toThrow(ValidationError);
   });
 });

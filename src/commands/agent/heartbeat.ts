@@ -4,7 +4,7 @@
  * Sends a heartbeat to indicate the agent is alive.
  */
 
-import { AGENT_ID, getConvexClient } from "../../lib/convex.js";
+import { AGENT_ID } from "../../lib/convex.js";
 import { writeJson } from "../../lib/output.js";
 import { InvalidAgentError, NetworkError } from "../../lib/errors.js";
 
@@ -17,7 +17,7 @@ export async function sendHeartbeat(): Promise<void> {
     
     // TODO: Call actual Convex mutation when types are synced
     // const convex = getConvexClient();
-    // const result = await convex.mutation("api:agents.heartbeat", {
+    // const result = await convex.mutation("api:agents.heartbeatTask", {
     //   agentId: AGENT_ID,
     // });
     

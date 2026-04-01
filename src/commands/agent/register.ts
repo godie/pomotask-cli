@@ -4,7 +4,6 @@
  * Registers an agent with name, type, and capabilities.
  */
 
-import { getConvexClient } from "../../lib/convex.js";
 import { writeJson } from "../../lib/output.js";
 import { NetworkError, ValidationError } from "../../lib/errors.js";
 
@@ -42,7 +41,7 @@ export async function registerAgent(options: RegisterAgentOptions): Promise<void
     
     // TODO: Call actual Convex mutation when types are synced
     // const convex = getConvexClient();
-    // const result = await convex.mutation("api:agents.register", {
+    // const result = await convex.mutation("api:agents.registerAgent", {
     //   name: options.name,
     //   type: options.type,
     //   capabilities,
