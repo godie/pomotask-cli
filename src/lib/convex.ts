@@ -1,5 +1,5 @@
 import { ConvexClient } from "convex/browser";
-import { InvalidAgentError } from "./errors.js";
+import { InvalidAgentError, NetworkError } from "./errors.js";
 
 /**
  * Get environment variables - wrapped for testability
@@ -40,6 +40,31 @@ export function getConvexClient(): ConvexClient {
 export const AGENT_ID = POMOTASK_AGENT_ID;
 
 export const CONVEX_TIMEOUT_MS = 10_000;
+
+/**
+ * Wrap a Convex query/mutation with timeout.
+ * Throws NetworkError if the operation exceeds CONVEX_TIMEOUT_MS.
+ */
+export async function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number = CONVEX_TIMEOUT_MS,
+): Promise<T> {
+  let timeoutId: NodeJS.Timeout | undefined;
+
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timeoutId = setTimeout(() => {
+      reject(new NetworkError(`Operation timed out after ${timeoutMs}ms`));
+    }, timeoutMs);
+  });
+
+  try {
+    return await Promise.race([promise, timeoutPromise]);
+  } finally {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  }
+}
 
 // Export for testing - allows mocking env vars
 export const ENV = {

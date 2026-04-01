@@ -13,11 +13,35 @@ export interface CommentTaskOptions {
   message: string;
 }
 
+/**
+ * Validate comment type - must be non-empty
+ */
+function isValidCommentType(type: string): boolean {
+  return type.trim().length > 0;
+}
+
+/**
+ * Validate comment message - must be non-empty after trimming
+ */
+function isValidMessage(message: string): boolean {
+  return message.trim().length > 0;
+}
+
 export async function commentTask(options: CommentTaskOptions): Promise<void> {
   try {
     // Validate inputs
     if (!options.type || !options.message) {
       throw new ValidationError("--type and --message are required");
+    }
+    
+    // Validate comment type is not empty
+    if (!isValidCommentType(options.type)) {
+      throw new ValidationError("Comment type cannot be empty.");
+    }
+    
+    // Validate message is not empty after trimming
+    if (!isValidMessage(options.message)) {
+      throw new ValidationError("Comment message cannot be empty.");
     }
     
     // TODO: Call actual Convex mutation when types are synced

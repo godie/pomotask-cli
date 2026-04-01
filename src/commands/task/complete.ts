@@ -13,11 +13,42 @@ export interface CompleteTaskOptions {
   commitSha: string;
 }
 
+/**
+ * Validate PR URL format - must be a valid URL
+ */
+function isValidPrUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Validate commit SHA format - must be 40 or 64 hex chars
+ */
+function isValidCommitSha(sha: string): boolean {
+  // SHA-1: 40 chars, SHA-256: 64 chars
+  const isHex = /^[a-fA-F0-9]+$/.test(sha);
+  return isHex && (sha.length === 40 || sha.length === 64);
+}
+
 export async function completeTask(options: CompleteTaskOptions): Promise<void> {
   try {
     // Validate inputs
     if (!options.prUrl || !options.commitSha) {
       throw new ValidationError("--pr-url and --commit-sha are required");
+    }
+    
+    // Validate PR URL format
+    if (!isValidPrUrl(options.prUrl)) {
+      throw new ValidationError("Invalid PR URL format. Must be a valid HTTP(S) URL.");
+    }
+    
+    // Validate commit SHA format
+    if (!isValidCommitSha(options.commitSha)) {
+      throw new ValidationError("Invalid commit SHA format. Must be 40 (SHA-1) or 64 (SHA-256) hex characters.");
     }
     
     // TODO: Call actual Convex mutation when types are synced
