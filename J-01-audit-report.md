@@ -13,8 +13,8 @@ Esta auditoría revisa la implementación actual contra los requisitos definidos
 | **Exit Codes** | ✅ | Mapeo 0-4 implementado en `src/lib/exitcodes.ts`. |
 | **Mapeo de Errores** | ✅ | `mapError` en `src/lib/errors.ts` captura timeouts y red. |
 | **Timeout (10s)** | ✅ | Definido como `CONVEX_TIMEOUT_MS = 10000`. |
-| **Normalización de Progreso** | ✅ | `task progress` normaliza a una línea y trunca a 280 caracteres con elipsis. |
-| **Sync Types Script** | ✅ | `scripts/sync-types.mjs` configurado para usar `../pomotask`. |
+| **Normalización de Progreso** | ✅ | `task progress` implementa normalización y truncado a 280 caracteres. Listo para integración Convex. |
+| **Sync Types Script** | ✅ | `scripts/sync-types.mjs` se corrigió para usar `../pomotask` en minúsculas. |
 | **Restricciones (No console.log)** | ✅ | No hay `console.log` directos en la lógica de comandos. |
 
 ## Gaps Corregidos durante INT-02 (por Jules)
