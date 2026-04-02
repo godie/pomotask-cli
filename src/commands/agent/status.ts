@@ -4,7 +4,7 @@
  * Gets the current status of the agent.
  */
 
-import { AGENT_ID, getConvexClient } from "../../lib/convex.js";
+import { AGENT_ID } from "../../lib/convex.js";
 import { writeJson } from "../../lib/output.js";
 import { InvalidAgentError, NetworkError } from "../../lib/errors.js";
 

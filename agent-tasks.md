@@ -28,7 +28,7 @@ Conclusión:
 ## OpenHands — ownership principal
 
 ### Bloque A. Bootstrap del repositorio
-**OH-01 — Inicializar estructura base del CLI**
+**OH-01 — Inicializar estructura base del CLI** ✅
 - Crear estructura de carpetas y archivos base
 - Configurar `package.json`
 - Configurar `tsconfig`
@@ -39,7 +39,7 @@ Criterio de aceptación:
 - `pnpm build` corre o queda listo con placeholders tipados
 - estructura alineada con `convex-cli-contexto.md`
 
-**OH-02 — Implementar constantes y utilidades base**
+**OH-02 — Implementar constantes y utilidades base** ✅
 - `src/lib/exitcodes.ts`
 - `src/lib/output.ts`
 - `src/lib/errors.ts`
@@ -49,7 +49,7 @@ Criterio de aceptación:
 - mapeo de errores reusable
 - tests unitarios básicos
 
-**OH-03 — Implementar `src/lib/convex.ts`**
+**OH-03 — Implementar `src/lib/convex.ts`** ✅
 - Validación de `CONVEX_URL`
 - Validación de `POMOTASK_AGENT_ID`
 - Inicialización del `ConvexClient`
@@ -61,7 +61,7 @@ Criterio de aceptación:
 - no usa `ConvexReactClient`
 
 ### Bloque B. Tipos y sincronización
-**OH-04 — Implementar `pnpm sync-types`**
+**OH-04 — Implementar `pnpm sync-types`** ✅
 - Crear script `scripts/sync-types.mjs`
 - Verificar `../pomotask/convex/_generated`
 - Copiar a `src/lib/convex/_generated`
@@ -72,13 +72,13 @@ Criterio de aceptación:
 - test o verificación automatizada mínima
 
 ### Bloque C. Comandos task
-**OH-05 — Implementar `task list`**
-**OH-06 — Implementar `task create`**
-**OH-07 — Implementar `task claim`**
-**OH-08 — Implementar `task progress`**
-**OH-09 — Implementar `task complete`**
-**OH-10 — Implementar `task fail`**
-**OH-11 — Implementar `task comment`**
+**OH-05 — Implementar `task list`** ✅
+**OH-06 — Implementar `task create`** ✅
+**OH-07 — Implementar `task claim`** ✅
+**OH-08 — Implementar `task progress`** ✅
+**OH-09 — Implementar `task complete`** ✅
+**OH-10 — Implementar `task fail`** ✅
+**OH-11 — Implementar `task comment`** ✅
 
 Criterio de aceptación por comando:
 - parsing correcto con Commander
@@ -92,22 +92,22 @@ Notas especiales:
 - `task progress` debe normalizar y truncar a 280 caracteres
 
 ### Bloque D. Comandos agent
-**OH-12 — Implementar `agent register`**
-**OH-13 — Implementar `agent heartbeat`**
-**OH-14 — Implementar `agent status`**
+**OH-12 — Implementar `agent register`** ✅
+**OH-13 — Implementar `agent heartbeat`** ✅
+**OH-14 — Implementar `agent status`** ✅
 
 Criterio de aceptación:
 - mismos estándares de salida y exit codes
 - tests por comando
 
 ### Bloque E. Integración técnica mínima
-**OH-15 — Integrar todos los comandos en `src/index.ts`**
+**OH-15 — Integrar todos los comandos en `src/index.ts`** ✅
 
 Criterio de aceptación:
 - árbol de comandos funcional
 - `--format` consistente donde aplique
 
-**OH-16 — Suite mínima de tests de contrato**
+**OH-16 — Suite mínima de tests de contrato** ✅
 - stdout vs stderr
 - exit codes críticos
 - `claim` sin tarea
@@ -121,7 +121,7 @@ Criterio de aceptación:
 ## Jules — ownership principal
 
 ### Bloque J. Auditoría de contrato
-**J-01 — Auditar que el contexto implementado coincida con `convex-cli-contexto.md`**
+**J-01 — Auditar que el contexto implementado coincida con `convex-cli-contexto.md`** ✅
 Revisar:
 - stack correcto
 - repo separado
@@ -135,7 +135,7 @@ Entregable:
 - checklist de conformidad
 - lista de gaps exactos
 
-**J-02 — Auditar mapeo de errores y resiliencia**
+**J-02 — Auditar mapeo de errores y resiliencia** ✅
 Revisar:
 - errores de red
 - timeout > 10s
@@ -147,7 +147,7 @@ Entregable:
 - matriz “error detectado → exit code esperado → evidencia”
 
 ### Bloque J. QA funcional y diseño de pruebas
-**J-03 — Diseñar edge cases por comando**
+**J-03 — Diseñar edge cases por comando** ✅
 Ejemplos:
 - `task progress` con multilinea, unicode y mensaje largo
 - `task claim` con `null`
@@ -157,7 +157,7 @@ Ejemplos:
 Entregable:
 - documento de casos borde priorizados
 
-**J-04 — Revisar la suite de tests propuesta por OpenHands**
+**J-04 — Revisar la suite de tests propuesta por OpenHands** ✅
 Revisar cobertura sobre:
 - contratos
 - formato de salida
@@ -169,12 +169,12 @@ Entregable:
 - sugerencias concretas
 
 ### Bloque J. Documentación operativa
-**J-05 — Mantener `.jules/cli.md`**
+**J-05 — Mantener `.jules/cli.md`** ✅
 - registrar decisiones no obvias
 - registrar sorpresas del backend o del tooling
 - no duplicar documentación básica
 
-**J-06 — Redactar `README.md` orientado a agentes**
+**J-06 — Redactar `README.md` orientado a agentes** ✅
 Debe incluir:
 - propósito
 - setup
@@ -184,7 +184,7 @@ Debe incluir:
 - ejemplo de uso de agente
 - explicación de exit codes
 
-**J-07 — Redactar guía de integración para agentes externos**
+**J-07 — Redactar guía de integración para agentes externos** ✅
 Documento sugerido:
 - `docs/integration-for-agents.md`
 
@@ -194,7 +194,7 @@ Debe incluir:
 - qué reintentar y qué no
 
 ### Bloque J. Auditoría de restricciones
-**J-08 — Verificar restricciones no negociables**
+**J-08 — Verificar restricciones no negociables** ✅
 Checklist explícita:
 - no `ConvexReactClient`
 - no `import.meta.env`
@@ -211,7 +211,7 @@ Entregable:
 ## Tareas compartidas de integración
 
 ### Integración 1
-**INT-01 — Smoke test del CLI completo**
+**INT-01 — Smoke test del CLI completo** ✅
 Owner principal: OpenHands  
 Apoyo: Jules
 
@@ -221,7 +221,7 @@ Validar:
 - errores básicos controlados
 
 ### Integración 2
-**INT-02 — Validación cruzada del contrato CLI**
+**INT-02 — Validación cruzada del contrato CLI** ✅
 Owner principal: Jules  
 Apoyo: OpenHands
 

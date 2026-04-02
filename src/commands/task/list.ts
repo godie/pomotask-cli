@@ -4,7 +4,6 @@
  * Lists tasks filtered by status and/or type.
  */
 
-import { getConvexClient } from "../../lib/convex.js";
 import { writeJson } from "../../lib/output.js";
 import { NetworkError } from "../../lib/errors.js";
 
