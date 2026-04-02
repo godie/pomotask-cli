@@ -16,11 +16,11 @@ export interface ProgressOptions {
 
 /**
  * Normalize progress message:
- * - Single line (replace newlines with space)
- * - Truncate to 280 characters
+ * - Single line (replace newlines and multiple spaces with a single space)
+ * - Truncate to 280 characters with ellipsis
  */
 export function normalizeProgressMessage(message: string, maxLength = 280): string {
-  // Replace newlines with spaces, collapse multiple spaces
+  // Replace newlines and multiple spaces with a single space
   const singleLine = message.replace(/\s+/g, " ").trim();
   
   // Truncate if too long
@@ -35,7 +35,7 @@ export async function reportProgress(options: ProgressOptions): Promise<void> {
   try {
     // TODO: Call actual Convex mutation when types are synced
     // const convex = getConvexClient();
-    // await convex.mutation("api:tasks.progress", {
+    // await convex.mutation("api:tasks.reportProgress", {
     //   taskId: options.taskId,
     //   message: normalizedMessage,
     //   level,

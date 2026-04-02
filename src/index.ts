@@ -32,7 +32,7 @@ task
   .option("--type <type>", "Filter by type")
   .option("--format <format>", "Output format (json|human)", "json")
   .action(async (opts) => {
-    await listTasks({ status: opts.status, type: opts.type });
+    await listTasks({ status: opts.status, type: opts.type, format: opts.format });
   });
 
 task
@@ -41,7 +41,7 @@ task
   .requiredOption("--type <type>", "Task type to claim")
   .option("--format <format>", "Output format (json|human)", "json")
   .action(async (opts) => {
-    await claimTask({ type: opts.type });
+    await claimTask({ type: opts.type, format: opts.format });
   });
 
 task
