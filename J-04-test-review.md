@@ -17,20 +17,12 @@ Esta revisión analiza la suite de tests actual frente a los requisitos del cont
 
 ## Huecos de Test Detectados (Gaps)
 
-1.  **Tests de Integración de Agente**:
-    - Faltan tests para los comandos `agent register`, `agent heartbeat` y `agent status`. Actualmente devuelven placeholders JSON en `src/index.ts`.
-2.  **Mocks de ConvexClient**:
-    - Se necesitan mocks reales para `ConvexClient` una vez se activen las llamadas a la API en los comandos. Actualmente, los tests evitan llamar al cliente o lo mockean superficialmente.
-3.  **Separación Estricta stdout/stderr en Ejecución**:
+1.  **Mocks de ConvexClient**:
+    - Se necesitan mocks reales para `ConvexClient` una vez se activen las llamadas a la API en los comandos.
+2.  **Separación Estricta stdout/stderr en Ejecución**:
     - Falta un test de "caja negra" que ejecute el binario compilado y verifique que ante un error nada sale por `stdout`.
-4.  **Verificación de Exit Codes Reales**:
-    - Aunque hay tests unitarios para los códigos de salida, falta verificar que el proceso de Node.js termine con el código correcto al fallar.
-
-## Sugerencias de Mejora
-
-1.  **Añadir Tests de Contrato de Agente**: Crear un bloque describe en `tests/commands-contract.test.ts` o un nuevo archivo para validar el output de los comandos del agente.
-2.  **Test de Smoke de Binario**: Crear un test que use `execa` para ejecutar `node dist/index.js` y verificar el árbol de ayuda y los códigos de salida básicos.
-3.  **Mocking Global de Convex**: Implementar un mock de `ConvexClient` que permita simular demoras (>10s) para probar `withTimeout`.
+3.  **Verificación de Exit Codes Reales**:
+    - Falta verificar que el proceso de Node.js termine con el código correcto al fallar usando `process.exit`.
 
 ## Conclusión
-La cobertura ha mejorado significativamente con la inclusión de tests de contrato para todos los comandos de tarea (`J-04-test-review.md` previo). Sin embargo, el área del Agente sigue siendo la más débil en términos de pruebas automáticas.
+La cobertura de contrato es excelente. Los siguientes pasos deben enfocarse en asegurar que las integraciones reales mantengan estos contratos.

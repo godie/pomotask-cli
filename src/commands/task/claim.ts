@@ -4,18 +4,21 @@
  * Claims a task of the specified type for the current agent.
  */
 
-import { AGENT_ID } from "../../lib/convex.js";
+import { AGENT_ID, validateEnvironment } from "../../lib/convex.js";
 import { writeJson } from "../../lib/output.js";
-import { NetworkError, NoTasksAvailableError, ValidationError } from "../../lib/errors.js";
+import { NetworkError, NoTasksAvailableError, ValidationError, InvalidAgentError } from "../../lib/errors.js";
 
 export interface ClaimTaskOptions {
   type: string;
 }
 
-export async function claimTask(_options: ClaimTaskOptions): Promise<void> {
+export async function claimTask(options: ClaimTaskOptions): Promise<void> {
   try {
+    // Validate environment first
+    validateEnvironment();
+
     // Validate task type is not empty
-    if (!_options.type || _options.type.trim() === "") {
+    if (!options.type || options.type.trim() === "") {
       throw new ValidationError("--type is required");
     }
     
@@ -39,7 +42,7 @@ export async function claimTask(_options: ClaimTaskOptions): Promise<void> {
       data: { taskId: "claimed-task-id", agentId: AGENT_ID },
     });
   } catch (err) {
-    if (err instanceof NoTasksAvailableError || err instanceof ValidationError) {
+    if (err instanceof NoTasksAvailableError || err instanceof ValidationError || err instanceof InvalidAgentError) {
       throw err;
     }
     throw new NetworkError(err instanceof Error ? err.message : "Failed to claim task");
