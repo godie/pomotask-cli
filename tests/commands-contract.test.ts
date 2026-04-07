@@ -1,11 +1,29 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
+
+// Set dummy env vars for tests
+process.env.CONVEX_URL = "https://dummy.convex.cloud";
+process.env.POMOTASK_AGENT_ID = "agent-1";
+
+// Mock convex.js to provide AGENT_ID
+vi.mock("../src/lib/convex.js", async () => {
+  const actual = await vi.importActual("../src/lib/convex.js");
+  return {
+    ...actual,
+    AGENT_ID: "agent-1",
+    validateEnvironment: vi.fn(),
+  };
+});
+
+import { listTasks } from "../src/commands/task/list.js";
+import { claimTask } from "../src/commands/task/claim.js";
+import { reportProgress } from "../src/commands/task/progress.js";
 import { completeTask } from "../src/commands/task/complete.js";
 import { failTask } from "../src/commands/task/fail.js";
 import { createTask } from "../src/commands/task/create.js";
 import { commentTask } from "../src/commands/task/comment.js";
-import { listTasks } from "../src/commands/task/list.js";
-import { claimTask } from "../src/commands/task/claim.js";
-import { reportProgress } from "../src/commands/task/progress.js";
+import { registerAgent } from "../src/commands/agent/register.js";
+import { sendHeartbeat } from "../src/commands/agent/heartbeat.js";
+import { getAgentStatus } from "../src/commands/agent/status.js";
 import { ValidationError, NoTasksAvailableError } from "../src/lib/errors.js";
 
 // Mock output module
@@ -265,7 +283,6 @@ describe("agent register - contract tests", () => {
   });
 
   it("should output valid JSON with all required fields", async () => {
-    const { registerAgent } = await import("../src/commands/agent/register.js");
     await registerAgent({ name: "codex-1", type: "codex", capabilities: "codegen,refactor" });
     
     expect(writeJson).toHaveBeenCalledWith(
@@ -282,21 +299,18 @@ describe("agent register - contract tests", () => {
   });
 
   it("should reject missing name", async () => {
-    const { registerAgent } = await import("../src/commands/agent/register.js");
     await expect(
       registerAgent({ name: "", type: "codex", capabilities: "" })
     ).rejects.toThrow(ValidationError);
   });
 
   it("should reject missing type", async () => {
-    const { registerAgent } = await import("../src/commands/agent/register.js");
     await expect(
       registerAgent({ name: "codex-1", type: "", capabilities: "" })
     ).rejects.toThrow(ValidationError);
   });
 
   it("should handle empty capabilities", async () => {
-    const { registerAgent } = await import("../src/commands/agent/register.js");
     await registerAgent({ name: "codex-1", type: "codex", capabilities: "" });
     
     expect(writeJson).toHaveBeenCalledWith(
@@ -315,13 +329,6 @@ describe("agent heartbeat - contract tests", () => {
   });
 
   it("should output valid JSON with all required fields", async () => {
-    // Mock AGENT_ID
-    vi.doMock("../src/lib/convex.js", () => ({
-      ...vi.importActual("../src/lib/convex.js"),
-      AGENT_ID: "test-agent-id",
-    }));
-    
-    const { sendHeartbeat } = await import("../src/commands/agent/heartbeat.js");
     await sendHeartbeat();
     
     expect(writeJson).toHaveBeenCalledWith(
@@ -329,7 +336,7 @@ describe("agent heartbeat - contract tests", () => {
         ok: true,
         command: "agent heartbeat",
         data: expect.objectContaining({
-          agentId: "test-agent-id",
+          agentId: "agent-1",
           status: "alive",
         }),
       })
@@ -343,12 +350,6 @@ describe("agent status - contract tests", () => {
   });
 
   it("should output valid JSON with all required fields", async () => {
-    vi.doMock("../src/lib/convex.js", () => ({
-      ...vi.importActual("../src/lib/convex.js"),
-      AGENT_ID: "test-agent-id",
-    }));
-    
-    const { getAgentStatus } = await import("../src/commands/agent/status.js");
     await getAgentStatus();
     
     expect(writeJson).toHaveBeenCalledWith(
@@ -356,7 +357,7 @@ describe("agent status - contract tests", () => {
         ok: true,
         command: "agent status",
         data: expect.objectContaining({
-          agentId: "test-agent-id",
+          agentId: "agent-1",
           status: "active",
         }),
       })

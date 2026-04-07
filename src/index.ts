@@ -19,7 +19,17 @@ const program = new Command();
 program
   .name("pomotask")
   .description("Pomotask CLI — agent interface for task management")
-  .version("0.0.1");
+  .version("0.0.1")
+  // Override exit code for Commander validation errors to 3
+  .exitOverride((err) => {
+    if (err.code?.startsWith("commander.")) {
+      process.exit(3);
+    }
+    throw err;
+  })
+  .configureOutput({
+    writeErr: (str) => writeStderr(str.trim()),
+  });
 
 // ── task ──────────────────────────────────────────────────────────────
 

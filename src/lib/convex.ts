@@ -8,16 +8,16 @@ function getEnvVar(name: string): string | undefined {
   return process.env[name];
 }
 
-const CONVEX_URL = getEnvVar("CONVEX_URL");
-const POMOTASK_AGENT_ID = getEnvVar("POMOTASK_AGENT_ID");
-
 /**
  * Validate environment. Throws InvalidAgentError if invalid.
  */
 export function validateEnvironment(): void {
-  if (!CONVEX_URL || !POMOTASK_AGENT_ID) {
+  const url = getEnvVar("CONVEX_URL");
+  const agentId = getEnvVar("POMOTASK_AGENT_ID");
+
+  if (!url || !agentId) {
     throw new InvalidAgentError(
-      !CONVEX_URL
+      !url
         ? "CONVEX_URL is required"
         : "POMOTASK_AGENT_ID is required",
     );
@@ -32,12 +32,12 @@ let convexClient: ConvexClient | null = null;
 export function getConvexClient(): ConvexClient {
   if (!convexClient) {
     validateEnvironment();
-    convexClient = new ConvexClient(CONVEX_URL as string);
+    convexClient = new ConvexClient(getEnvVar("CONVEX_URL") as string);
   }
   return convexClient;
 }
 
-export const AGENT_ID = POMOTASK_AGENT_ID;
+export const AGENT_ID = getEnvVar("POMOTASK_AGENT_ID");
 
 export const CONVEX_TIMEOUT_MS = 10_000;
 
@@ -65,9 +65,3 @@ export async function withTimeout<T>(
     }
   }
 }
-
-// Export for testing - allows mocking env vars
-export const ENV = {
-  CONVEX_URL,
-  POMOTASK_AGENT_ID,
-};
