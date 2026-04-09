@@ -39,6 +39,8 @@ export function getConvexClient(): ConvexClient {
 
 export const AGENT_ID = getEnvVar("POMOTASK_AGENT_ID");
 
+export const CONVEX_URL = getEnvVar("CONVEX_URL");
+
 export const CONVEX_TIMEOUT_MS = 10_000;
 
 /**

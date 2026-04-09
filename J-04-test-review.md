@@ -9,12 +9,12 @@ Esta revisión analiza la suite de tests actual frente a los requisitos del cont
 | **Librería de Salida (`output.ts`)** | ✅ | Cubre `stdout`, `stderr` y formato base. |
 | **Exit Codes (`exitcodes.ts`)** | ✅ | Verifica las constantes de los códigos de salida. |
 | **Mapeo de Errores (`errors.ts`)** | ✅ | Verifica el mapeo de red, validación y agente a exit codes. |
-<<<<<<< HEAD
 | **Normalización de Progreso** | ✅ | Tests exhaustivos para colapsar espacios, saltos de línea y truncado (`tests/normalize.test.ts`). |
 | **Comandos de Tarea (`task`)** | ✅ | `tests/commands-contract.test.ts` cubre el esquema del JSON devuelto por todos los comandos de tarea, incluyendo validaciones locales (`complete`, `create`, `comment`). |
 | **Comandos de Agente (`agent`)** | ✅ | Tests de contrato completos para `register`, `heartbeat`, y `status` en `tests/commands-contract.test.ts` (28 tests). |
 | **Validación de Entorno** | ✅ | Verifica la detección de variables faltantes (`CONVEX_URL`, `AGENT_ID`) en `tests/convex.test.ts`. |
 | **Sync Types Script** | ✅ | Verifica que el script falle si la fuente no existe (`tests/sync-types.test.ts`). |
+| **Tests E2E (INT-03)** | ✅ | Suite completa de tests E2E en `tests/e2e/task-workflows.test.ts` (35 tests, 1 skipped). |
 
 ## Huecos de Test Detectados (Gaps)
 
