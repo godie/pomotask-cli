@@ -232,7 +232,7 @@ Validar:
 - manejo de `stderr`
 
 ### Integración 3
-**INT-03 — E2E contra deployment real o stub controlado**
+**INT-03 — E2E contra deployment real o stub controlado** ✅
 Owner principal: OpenHands  
 Apoyo: Jules
 
@@ -244,7 +244,7 @@ Validar:
 - heartbeat
 
 ### Integración 4
-**INT-04 — Release readiness**
+**INT-04 — Release readiness** ✅
 Owner principal: Jules  
 Apoyo: OpenHands
 
