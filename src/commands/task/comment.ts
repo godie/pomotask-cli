@@ -13,11 +13,13 @@ export interface CommentTaskOptions {
   message: string;
 }
 
+const VALID_COMMENT_TYPES = ["clarification", "response", "context", "progress"];
+
 /**
- * Validate comment type - must be non-empty
+ * Validate comment type - must be one of the allowed types
  */
 function isValidCommentType(type: string): boolean {
-  return type.trim().length > 0;
+  return VALID_COMMENT_TYPES.includes(type.toLowerCase());
 }
 
 /**
@@ -34,9 +36,9 @@ export async function commentTask(options: CommentTaskOptions): Promise<void> {
       throw new ValidationError("--type and --message are required");
     }
     
-    // Validate comment type is not empty
+    // Validate comment type is one of the allowed types
     if (!isValidCommentType(options.type)) {
-      throw new ValidationError("Comment type cannot be empty.");
+      throw new ValidationError(`Invalid comment type. Must be one of: ${VALID_COMMENT_TYPES.join(", ")}`);
     }
     
     // Validate message is not empty after trimming
@@ -46,7 +48,7 @@ export async function commentTask(options: CommentTaskOptions): Promise<void> {
     
     // TODO: Call actual Convex mutation when types are synced
     // const convex = getConvexClient();
-    // await convex.mutation("api:tasks.comment", {
+    // await convex.mutation("api:tasks.commentTask", {
     //   taskId: options.taskId,
     //   agentId: AGENT_ID,
     //   type: options.type,
