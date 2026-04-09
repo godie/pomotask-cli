@@ -1,4 +1,4 @@
-# AGENT.md — Pomotask CLI
+# AGENTS.md — Pomotask CLI
 
 ## Misión
 Implementar y mantener el CLI oficial de Pomotask para agentes LLM.
