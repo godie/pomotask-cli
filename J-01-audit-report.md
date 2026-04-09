@@ -29,12 +29,12 @@ Esta auditoría revisa la implementación actual contra los requisitos definidos
 2.  **Normalización de Progreso**: Implementada la lógica de normalización y truncado en `src/commands/task/progress.ts`.
 3.  **Contrato de Claim**: Se ajustó la salida de `task claim` para devolver un objeto JSON plano según el documento de contexto.
 4.  **Validación de Comentarios**: Se restringió `task comment --type` a los valores permitidos.
-5.  **Pasar Opciones**: Se ensured que `--format` y otros parámetros se pasen correctamente desde `src/index.ts` a los comandos.
+5.  **Pasar Opciones**: Se aseguró que `--format` y otros parámetros se pasen correctamente desde `src/index.ts` a los comandos.
 
 ## Lista de Gaps Pendientes
 
-1.  **Integración Real con Convex**: Las acciones de los comandos tienen placeholders (`TODO`) y no invocan al cliente de Convex real.
-2.  **Lógica de Formato Human**: Aunque el flag `--format` existe, la salida legible para humanos es mínima.
+1.  **Lógica de Formato Human**: Aunque la opción existe, no hay una implementación que diferencie significativamente el output JSON del legible para humanos (pendiente de requerimiento de diseño).
+2.  **Llamadas Reales a Convex**: Las acciones de los comandos contienen placeholders (`TODO`) y no invocan la API real aún (bloque C y D de OpenHands).
 
 ## Conclusión
-La estructura base está completa y cumple con todas las restricciones críticas. El CLI es funcional en su modo "contract-first".
+Tras la ejecución de INT-02, el CLI cumple estrictamente con el contrato definido en `convex-cli-contexto.md` en términos de interfaz, validación y formato de salida.

@@ -17,7 +17,7 @@ export async function sendHeartbeat(): Promise<void> {
     
     // TODO: Call actual Convex mutation when types are synced
     // const convex = getConvexClient();
-    // const result = await convex.mutation("api:agents.heartbeat", {
+    // const result = await convex.mutation("api:agents.heartbeatTask", {
     //   agentId: AGENT_ID,
     // });
     

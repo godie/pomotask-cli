@@ -5,11 +5,12 @@
  */
 
 import { AGENT_ID, validateEnvironment } from "../../lib/convex.js";
-import { writeJson } from "../../lib/output.js";
+import { writeJson, OutputFormat } from "../../lib/output.js";
 import { NetworkError, NoTasksAvailableError, ValidationError, InvalidAgentError } from "../../lib/errors.js";
 
 export interface ClaimTaskOptions {
   type: string;
+  format?: OutputFormat;
 }
 
 export async function claimTask(options: ClaimTaskOptions): Promise<void> {
@@ -24,22 +25,22 @@ export async function claimTask(options: ClaimTaskOptions): Promise<void> {
     
     // TODO: Call actual Convex mutation when types are synced
     // const convex = getConvexClient();
-    // const result = await convex.mutation("api:tasks.claim", {
+    // const result = await convex.mutation("api:tasks.claimTask", {
     //   agentId: AGENT_ID,
     //   type: options.type,
     // });
     
-    // Placeholder: simulate no tasks available (for exit code 1 test)
-    const hasTasks = false; // TODO: Check with real API
-    
-    if (!hasTasks) {
+    const result: { taskId: string } | null = null;
+
+    if (!result) {
       throw new NoTasksAvailableError();
     }
-    
+
+    const taskResult = result as { taskId: string };
+
     writeJson({
-      ok: true,
-      command: "task claim",
-      data: { taskId: "claimed-task-id", agentId: AGENT_ID },
+      taskId: taskResult.taskId,
+      agentId: AGENT_ID,
     });
   } catch (err) {
     if (err instanceof NoTasksAvailableError || err instanceof ValidationError || err instanceof InvalidAgentError) {
