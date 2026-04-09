@@ -179,7 +179,7 @@ pomotask-cli/
 ├── scripts/
 │   └── sync-types.mjs
 ├── .env.example
-├── AGENT.md
+├── AGENTS.md
 ├── package.json
 └── vitest.config.ts
 ```

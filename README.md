@@ -53,4 +53,4 @@ Missing or invalid environment variables will result in **Exit Code 4**.
 - Debugging logs, warnings, and error messages are written to `stderr`.
 - Use `--format human` for human-readable output (debugging only).
 
-See `AGENT.md` for the full technical contract and `docs/integration-for-agents.md` for integration guides.
+See `AGENTS.md` for the full technical contract and `docs/integration-for-agents.md` for integration guides.

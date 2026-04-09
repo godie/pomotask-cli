@@ -253,7 +253,7 @@ Checklist:
 - `pnpm test`
 - docs mínimas
 - `.env.example`
-- `AGENT.md`
+- `AGENTS.md`
 - `convex-cli-contexto.md`
 
 ---
