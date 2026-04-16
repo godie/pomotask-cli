@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
   PomotaskCliError,
   NoTasksAvailableError,
@@ -8,6 +8,7 @@ import {
   mapError,
 } from "../src/lib/errors.js";
 import { EXIT_CODES } from "../src/lib/exitcodes.js";
+import * as output from "../src/lib/output.js";
 
 describe("PomotaskCliError", () => {
   it("should store exit code", () => {
@@ -34,8 +35,11 @@ describe("mapError", () => {
     expect(mapped).toBeInstanceOf(NetworkError);
   });
 
-  it("should map unknown errors to NetworkError (safe default)", () => {
+  it("should map unknown errors to NetworkError (safe default) and log to stderr", () => {
+    const spy = vi.spyOn(output, "writeStderr").mockImplementation(() => {});
     const mapped = mapError("something broke");
     expect(mapped).toBeInstanceOf(NetworkError);
+    expect(spy).toHaveBeenCalledWith(expect.stringContaining("Unexpected error: something broke"));
+    spy.mockRestore();
   });
 });
